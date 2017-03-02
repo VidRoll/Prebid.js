@@ -1,0 +1,15 @@
+[
+    "appnexus",
+    "appnexusAst",
+    "vidRoll",
+    {
+      "appnexusAst": {
+        "supportedMediaTypes": ["video"]
+      }
+    },
+    {
+      "vidRoll": {
+        "supportedMediaTypes": ["video"]
+      }
+    }
+]
