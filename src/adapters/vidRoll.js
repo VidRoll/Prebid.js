@@ -72,6 +72,8 @@ function VidRollAdapter() {
         const params = bid.params;
         const dim = bid.sizes;
 
+        openrtbBidRequest.site.id = params.partnerId;
+
         let imp = createImpObj(parseInt(params.placementId), dim[0], dim[1], params.bidFloor || 0);
 
         return imp;
