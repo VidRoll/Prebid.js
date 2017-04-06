@@ -5,7 +5,8 @@ import * as utils from 'src/utils';
 import { ajax } from 'src/ajax';
 import { STATUS } from 'src/constants';
 
-const ENDPOINT = '//hollywoodwire.tv/rtbBidder.php';
+//const ENDPOINT = '//hollywoodwire.tv/rtbBidder.php';
+const ENDPOINT = 'https://vidroll-rtb-server-staging-2.azurewebsites.net/rtb';
 
 /**
  * Bidder adapter for /ut endpoint. Given the list of all ad unit tag IDs,
@@ -89,8 +90,9 @@ function VidRollAdapter() {
       const payload = JSON.stringify(payloadJson);
       console.log(`payload`, payload);
       ajax(ENDPOINT, handleResponse, payload, {
-        contentType: 'text/plain',
-        withCredentials : true
+        contentType: 'application/json',
+        // TODO update to true
+        withCredentials : false
       });
     }
   };
@@ -124,12 +126,19 @@ function VidRollAdapter() {
     utils._each(parsed.seatbid, function(seatbid) {
       utils._each(seatbid.bid, function(seatbidBid) {
         let bid = bidfactory.createBid(STATUS.GOOD);
+        let nurl;
+
+        if (seatbidBid.adm) {
+          nurl = `http://hollywoodwire.tv/vast.php?vast=` + seatbidBid.adm;
+        } else {
+          nurl = seatbidBid.nurl;
+        }
 
         bid.code = baseAdapter.getBidderCode();
         bid.bidderCode = baseAdapter.getBidderCode();
         bid.cpm = seatbidBid.price;
-        bid.vastUrl = seatbidBid.nurl;
-        bid.descriptionUrl = seatbidBid.nurl;
+        bid.vastUrl = nurl;
+        bid.descriptionUrl = nurl;
         bid.creative_id = seatbidBid.crid;
         bid.width = seatbidBid.w;
         bid.height = seatbidBid.h;
